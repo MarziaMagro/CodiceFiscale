@@ -1,0 +1,47 @@
+openapi: 3.0.1
+info:
+  title: Codice Fiscale API
+  description: API REST che restituisce data di nascita ed età a partire da un codice fiscale
+  version: 1.0.0
+
+paths:
+  /cf/{codiceFiscale}:
+    get:
+      summary: Restituisce data di nascita ed età dato un codice fiscale
+      parameters:
+        - name: codiceFiscale
+          in: path
+          description: Codice fiscale della persona
+          required: true
+          schema:
+            type: string
+            example: RSSMRA85T10A562S
+      responses:
+        '200':
+          description: Dati persona trovati
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonaDto'
+        '404':
+          description: Persona non trovata
+
+components:
+  schemas:
+    PersonaDto:
+      type: object
+      properties:
+        codiceFiscale:
+          type: string
+          example: RSSMRA85T10A562S
+        dataNascita:
+          type: string
+          format: date
+          example: 1985-12-10
+        eta:
+          type: integer
+          example: 38
+      required:
+        - codiceFiscale
+        - dataNascita
+        - eta
