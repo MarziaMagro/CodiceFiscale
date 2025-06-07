@@ -1,0 +1,111 @@
+openapi: 3.0.3
+info:
+  title: Cittadino API
+  version: 1.0.0
+  description: API per creare e ottenere informazioni di un cittadino
+
+paths:
+  /cittadino/create:
+    post:
+      tags:
+        - Cittadino
+      summary: Crea un nuovo cittadino
+      operationId: createCittadino
+      requestBody:
+        description: Dati del cittadino da creare
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CittadinoInputDto'
+      responses:
+        '201':
+          description: Cittadino creato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CittadinoFullOutputDto'
+        '400':
+          description: Dati non validi
+
+  /cittadino/{codiceFiscale}:
+    get:
+      tags:
+        - Cittadino
+      summary: Ottieni data di nascita ed età del cittadino dato il codice fiscale
+      operationId: getCittadinoByCodiceFiscale
+      parameters:
+        - name: codiceFiscale
+          in: path
+          required: true
+          description: Codice fiscale del cittadino
+          schema:
+            type: string
+            example: RSSMRA97A01H501C
+      responses:
+        '200':
+          description: Informazioni trovate
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CittadinoOutputCfDto'
+        '404':
+          description: Cittadino non trovato
+
+components:
+  schemas:
+    CittadinoInputDto:
+      type: object
+      required:
+        - codiceFiscale
+        - name
+        - surname
+        - birthDate
+      properties:
+        codiceFiscale:
+          type: string
+          example: RSSMRA97A01H501C
+        name:
+          type: string
+          example: Mario
+        surname:
+          type: string
+          example: Rossi
+        birthDate:
+          type: string
+          format: date
+          example: 1997-01-01
+        age:
+          type: integer
+          example: 28
+
+    CittadinoOutputCfDto:
+      type: object
+      properties:
+        birthDate:
+          type: string
+          format: date
+          example: 1997-01-01
+        age:
+          type: integer
+          example: 28
+
+    CittadinoFullOutputDto:
+      type: object
+      properties:
+        codiceFiscale:
+          type: string
+          example: RSSMRA97A01H501C
+        name:
+          type: string
+          example: Mario
+        surname:
+          type: string
+          example: Rossi
+        birthDate:
+          type: string
+          format: date
+          example: 1997-01-01
+        age:
+          type: integer
+          example: 28
