@@ -24,8 +24,4 @@ public class CittadinoEntity {
     private LocalDate birthDate;
     private Integer age;
 
-
-
-
-
 }
