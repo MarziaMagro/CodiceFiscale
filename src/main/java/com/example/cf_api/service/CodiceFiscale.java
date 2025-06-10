@@ -12,7 +12,6 @@ public class CodiceFiscale {
     private String sex;
 
     // Mappatura Lettera --> Mese
-
     private static final Map<Character, Integer> meseCodici = new HashMap<>();
 
     static {
@@ -47,7 +46,6 @@ public class CodiceFiscale {
     }
 
     //METODO PER ESTRARRE LA DATA
-
     private LocalDate extractDateOfBirth(String code) {
         int yy = Integer.parseInt(code.substring(0, 2));
         char meseChar = code.charAt(2);
@@ -68,7 +66,6 @@ public class CodiceFiscale {
     }
 
     //CONTROLLO DEL GIORNO PER IL SESSO (F--> M +40)
-
     private String extractSex(String code) {
         int day = Integer.parseInt(code);
         return (day > 40) ? "F" : "M";
