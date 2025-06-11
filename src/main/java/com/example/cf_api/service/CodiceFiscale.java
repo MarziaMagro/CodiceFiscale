@@ -1,7 +1,6 @@
 package com.example.cf_api.service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,21 +11,21 @@ public class CodiceFiscale {
     private String sex;
 
     // Mappatura Lettera --> Mese
-    private static final Map<Character, Integer> meseCodici = new HashMap<>();
+    private static final Map<Character, Integer> months = new HashMap<>();
 
     static {
-        meseCodici.put('A', 1);
-        meseCodici.put('B', 2);
-        meseCodici.put('C', 3);
-        meseCodici.put('D', 4);
-        meseCodici.put('E', 5);
-        meseCodici.put('H', 6);
-        meseCodici.put('L', 7);
-        meseCodici.put('M', 8);
-        meseCodici.put('P', 9);
-        meseCodici.put('R', 10);
-        meseCodici.put('S', 11);
-        meseCodici.put('T', 12);
+        months.put('A', 1);
+        months.put('B', 2);
+        months.put('C', 3);
+        months.put('D', 4);
+        months.put('E', 5);
+        months.put('H', 6);
+        months.put('L', 7);
+        months.put('M', 8);
+        months.put('P', 9);
+        months.put('R', 10);
+        months.put('S', 11);
+        months.put('T', 12);
     }
 
     //CONTROLLO VALIDITA CODICE FISCALE
@@ -42,34 +41,39 @@ public class CodiceFiscale {
 
     public void extractFromData() {
         dateOfBirth = extractDateOfBirth(codiceFiscale.substring(6, 11));
-        sex = extractSex(codiceFiscale.substring(9, 11));
     }
 
     //METODO PER ESTRARRE LA DATA
     private LocalDate extractDateOfBirth(String code) {
+
+        //controllo sull'anno
         int yy = Integer.parseInt(code.substring(0, 2));
-        char meseChar = code.charAt(2);
+        int year;
+        if (yy > 50) {
+            year = 1900 + yy; // 51-99 -> 1951-1999
+        } else {
+            year = 2000 + yy; // 00-50 -> 2000-2050
+        }
+
+        char monthChar = code.charAt(2);
+        if (!months.containsKey(monthChar)) {
+            throw new IllegalArgumentException("Carattere mese non valido nel codice fiscale");
+        }
+        int month = months.get(monthChar);
+
         int dd = Integer.parseInt(code.substring(3, 5));
 
-        if (yy < 40) {
-            yy += 2000;
-        } else {
-            yy += 1900;
-        }
-
-        int month = meseCodici.getOrDefault(meseChar, 1);
+        // Controllo sul sesso e corregge giorno per le femmine
         if (dd > 40) {
+            this.sex = "F";
             dd -= 40;
+        } else {
+            this.sex = "M";
         }
 
-        return LocalDate.of(yy, month, dd);
+        return LocalDate.of(year, month, dd);
     }
 
-    //CONTROLLO DEL GIORNO PER IL SESSO (F--> M +40)
-    private String extractSex(String code) {
-        int day = Integer.parseInt(code);
-        return (day > 40) ? "F" : "M";
-    }
 
     public String getCodiceFiscale() {
         return codiceFiscale;
@@ -79,8 +83,8 @@ public class CodiceFiscale {
         this.codiceFiscale = codiceFiscale;
     }
 
-    public String getDateOfBirth() {
-        return dateOfBirth.format(DateTimeFormatter.ofPattern("dd/MM/yy"));
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
