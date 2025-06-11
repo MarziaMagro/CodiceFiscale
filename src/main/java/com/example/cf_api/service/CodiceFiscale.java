@@ -8,7 +8,6 @@ public class CodiceFiscale {
 
     private LocalDate dateOfBirth;
 
-    // Mappatura Lettera --> Mese
     private static final Map<Character, Integer> months = new HashMap<>();
 
     static {
@@ -27,20 +26,16 @@ public class CodiceFiscale {
     }
 
     //CONTROLLO VALIDITA CODICE FISCALE
-
     public CodiceFiscale(String codiceFiscale) {
         if (codiceFiscale == null || codiceFiscale.length() != 16) {
             throw new IllegalArgumentException("Codice fiscale non valido");
         }
-        //ESTRAZIONE DATI ANNO MESE E GIORNO
         this.dateOfBirth = extractDateOfBirth(codiceFiscale.substring(6, 11));
     }
-
 
     //METODO PER ESTRARRE LA DATA
     private LocalDate extractDateOfBirth(String code) {
 
-        //controllo sull'anno
         int yy = Integer.parseInt(code.substring(0, 2));
         int year;
         if (yy > 50) {
@@ -56,14 +51,11 @@ public class CodiceFiscale {
         int month = months.get(monthChar);
 
         int dd = Integer.parseInt(code.substring(3, 5));
-        // Controllo sul sesso e corregge giorno per le femmine
         if (dd > 40) {
             dd -= 40;
         }
-
         return LocalDate.of(year, month, dd);
     }
-
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }

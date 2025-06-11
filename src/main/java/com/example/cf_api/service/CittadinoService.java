@@ -9,12 +9,9 @@ import java.time.Period;
 @Service
 public class CittadinoService {
 
-    //GET cittadino/codicefiscale
-
     public CittadinoDto getFromCodiceFiscale(String codiceFiscale) {
         CodiceFiscale cf = new CodiceFiscale(codiceFiscale);
         LocalDate birthDate = cf.getDateOfBirth();
-        //Calcolo età
         int age = Period.between(birthDate, LocalDate.now()).getYears();
         CittadinoDto cittadinoDto = new CittadinoDto();
         cittadinoDto.setBirthDate(birthDate);
