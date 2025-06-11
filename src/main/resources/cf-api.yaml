@@ -2,10 +2,9 @@ openapi: 3.0.3
 info:
   title: Cittadino API
   version: 1.0.0
-  description: API per ottenere informazioni di un cittadino a partire dal codice fiscale
+  description: API per ottenere informazioni richieste di un cittadino a partire dal codice fiscale
 
 paths:
-
   /cittadino/{codiceFiscale}:
     get:
       tags:

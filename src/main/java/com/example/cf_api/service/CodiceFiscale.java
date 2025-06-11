@@ -6,9 +6,7 @@ import java.util.Map;
 
 public class CodiceFiscale {
 
-    private String codiceFiscale;
     private LocalDate dateOfBirth;
-    private String sex;
 
     // Mappatura Lettera --> Mese
     private static final Map<Character, Integer> months = new HashMap<>();
@@ -34,14 +32,10 @@ public class CodiceFiscale {
         if (codiceFiscale == null || codiceFiscale.length() != 16) {
             throw new IllegalArgumentException("Codice fiscale non valido");
         }
-        this.codiceFiscale = codiceFiscale;
+        //ESTRAZIONE DATI ANNO MESE E GIORNO
+        this.dateOfBirth = extractDateOfBirth(codiceFiscale.substring(6, 11));
     }
 
-    //METODO PER PRENDERE I DATI
-
-    public void extractFromData() {
-        dateOfBirth = extractDateOfBirth(codiceFiscale.substring(6, 11));
-    }
 
     //METODO PER ESTRARRE LA DATA
     private LocalDate extractDateOfBirth(String code) {
@@ -62,40 +56,16 @@ public class CodiceFiscale {
         int month = months.get(monthChar);
 
         int dd = Integer.parseInt(code.substring(3, 5));
-
         // Controllo sul sesso e corregge giorno per le femmine
         if (dd > 40) {
-            this.sex = "F";
             dd -= 40;
-        } else {
-            this.sex = "M";
         }
 
         return LocalDate.of(year, month, dd);
-    }
-
-
-    public String getCodiceFiscale() {
-        return codiceFiscale;
-    }
-
-    public void setCodiceFiscale(String codiceFiscale) {
-        this.codiceFiscale = codiceFiscale;
     }
 
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
 }

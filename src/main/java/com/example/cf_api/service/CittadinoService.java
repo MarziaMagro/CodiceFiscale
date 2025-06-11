@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.format.DateTimeFormatter;
 
 @Service
 public class CittadinoService {
@@ -14,7 +13,6 @@ public class CittadinoService {
 
     public CittadinoDto getFromCodiceFiscale(String codiceFiscale) {
         CodiceFiscale cf = new CodiceFiscale(codiceFiscale);
-        cf.extractFromData();
         LocalDate birthDate = cf.getDateOfBirth();
         //Calcolo età
         int age = Period.between(birthDate, LocalDate.now()).getYears();
@@ -23,7 +21,6 @@ public class CittadinoService {
         cittadinoDto.setAge(age);
         return cittadinoDto;
     }
-
 }
 
 

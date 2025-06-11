@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CittadinoController implements CittadinoApi {
 
     private final CittadinoService cittadinoService;
-
+    //dependency injection
     public CittadinoController(CittadinoService cittadinoService) {
         this.cittadinoService = cittadinoService;
     }
